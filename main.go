@@ -27,5 +27,16 @@ func generateCSR(filename string) {
 	if (filename == "") {
 		filename = "newcert.csr"
 	}
-	
+	//TODO: Generate a CSR by prompting the user for required data.
+}
+
+func generateSelfSignedCert(filename string) {
+	if (filename == "") {
+		filename = "newcert.pem"
+	}
+	//TODO: Generate a self-signed cert by prompting the user for required data.
+}
+
+func signCert(filename string) {
+	//TODO: Process a CSR, and sign the certificate.
 }
