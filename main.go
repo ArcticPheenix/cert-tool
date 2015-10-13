@@ -1,7 +1,7 @@
 package main
 
 import (
-	"csr"
+	"cert-tool/csr"
 	"flag"
 	"fmt"
 )

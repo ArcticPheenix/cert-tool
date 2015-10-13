@@ -8,7 +8,7 @@ import (
 	"fmt"
 )
 
-func MakeCertSignReq(fqdn string) {
+func MakeCertSignReq(fqdn string) []byte {
 	// Populate the subject data.
 	subject := pkix.Name{
 		Country:            []string{"US"},
@@ -37,4 +37,5 @@ func MakeCertSignReq(fqdn string) {
 	if err != nil {
 		fmt.Println(err)
 	}
+	return certSignReq
 }
