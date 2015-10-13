@@ -4,7 +4,14 @@ import (
 	"cert-tool/csr"
 	"flag"
 	"fmt"
+	"io/ioutil"
 )
+
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
 
 func main() {
 	pSelfSignedOpt := flag.Bool("selfsigned", false, "Self signed certificate generation.")
@@ -22,7 +29,9 @@ func main() {
 	fmt.Println("signing-cert: ", *pSigningCert)
 	fmt.Println("days: ", *pDays)
 	fmt.Println("args: ", positionalArgs)
-	csr.MakeCertSignRequest("prvqenam101.namdom002.lab")
+	cert := csr.MakeCertSignReq("prvqenam101.namdom002.lab")
+	err := ioutil.WriteFile("cert.csr", cert, 0644)
+	check(err)
 }
 
 func generateCSR(filename string) {
