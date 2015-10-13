@@ -1,8 +1,9 @@
 package main
 
 import (
-	"fmt"
+	"csr"
 	"flag"
+	"fmt"
 )
 
 func main() {
@@ -21,17 +22,18 @@ func main() {
 	fmt.Println("signing-cert: ", *pSigningCert)
 	fmt.Println("days: ", *pDays)
 	fmt.Println("args: ", positionalArgs)
+	csr.MakeCertSignRequest("prvqenam101.namdom002.lab")
 }
 
 func generateCSR(filename string) {
-	if (filename == "") {
+	if filename == "" {
 		filename = "newcert.csr"
 	}
 	//TODO: Generate a CSR by prompting the user for required data.
 }
 
 func generateSelfSignedCert(filename string) {
-	if (filename == "") {
+	if filename == "" {
 		filename = "newcert.pem"
 	}
 	//TODO: Generate a self-signed cert by prompting the user for required data.

@@ -1,5 +1,0 @@
-package csr
-
-import (
-	"crypto"
-)
