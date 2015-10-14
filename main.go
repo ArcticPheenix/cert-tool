@@ -29,6 +29,7 @@ func main() {
 	fmt.Println("signing-cert: ", *pSigningCert)
 	fmt.Println("days: ", *pDays)
 	fmt.Println("args: ", positionalArgs)
+	generateCSR("prvqenam102.namdom002.lab", "prvqenam102.csr")
 }
 
 func generateCSR(fqdn, filename string) {
