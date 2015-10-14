@@ -29,16 +29,16 @@ func main() {
 	fmt.Println("signing-cert: ", *pSigningCert)
 	fmt.Println("days: ", *pDays)
 	fmt.Println("args: ", positionalArgs)
-	cert := csr.MakeCertSignReq("prvqenam101.namdom002.lab")
-	err := ioutil.WriteFile("cert.csr", cert, 0644)
-	check(err)
 }
 
-func generateCSR(filename string) {
+func generateCSR(fqdn, filename string) {
+	//TODO: Generate a CSR by prompting the user for required data.
 	if filename == "" {
 		filename = "newcert.csr"
 	}
-	//TODO: Generate a CSR by prompting the user for required data.
+	cert := csr.MakeCertSignReq(fqdn)
+	err := ioutil.WriteFile(filename, cert, 0644)
+	check(err)
 }
 
 func generateSelfSignedCert(filename string) {
