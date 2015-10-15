@@ -32,15 +32,9 @@ func main() {
 	fmt.Println("signing-cert: ", *pSigningCert)
 	fmt.Println("days: ", *pDays)
 	fmt.Println("args: ", positionalArgs)
-<<<<<<< HEAD
 	
 	// Test code
-	cert := csr.MakeCertSignReq("prvqenam101.namdom002.lab")
-	err := ioutil.WriteFile("cert.csr", cert, 0644)
-	check(err)
-=======
 	generateCSR("prvqenam102.namdom002.lab", "prvqenam102.csr")
->>>>>>> origin/master
 }
 
 func generateCSR(fqdn, filename string) {
