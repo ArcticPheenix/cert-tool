@@ -29,6 +29,8 @@ func main() {
 	fmt.Println("signing-cert: ", *pSigningCert)
 	fmt.Println("days: ", *pDays)
 	fmt.Println("args: ", positionalArgs)
+	
+	// Test code
 	cert := csr.MakeCertSignReq("prvqenam101.namdom002.lab")
 	err := ioutil.WriteFile("cert.csr", cert, 0644)
 	check(err)
