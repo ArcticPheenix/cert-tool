@@ -8,12 +8,13 @@ import (
 	"fmt"
 )
 
+// Creates a certificate signing request for the specified FQDN. Defaults to SHA256WithRSA.
 func MakeCertSignReq(fqdn string) []byte {
 	// Populate the subject data.
 	subject := pkix.Name{
 		Country:            []string{"US"},
 		Organization:       []string{"Microfocus International"},
-		OrganizationalUnit: []string{"Access and Identity Management"},
+		OrganizationalUnit: []string{"Identity and Access Management"},
 		Locality:           []string{"Provo"},
 		Province:           []string{"Utah"},
 		CommonName:         fqdn,
