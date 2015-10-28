@@ -35,7 +35,7 @@ func MakeCertSignReq(fqdn string) []byte {
 		fmt.Println(err)
 	}
 
-	// Create signing request and return byte array/slice if no errors were encountered.
+	// Create signing request and return byte slice if no errors were encountered.
 	certSignReq, err := x509.CreateCertificateRequest(rand.Reader, certificateRequest, privatekey)
 	if err != nil {
 		fmt.Println(err)

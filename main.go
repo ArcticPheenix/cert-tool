@@ -2,6 +2,7 @@ package main
 
 import (
 	"cert-tool/csr"
+	"cert-tool/selfsigned"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -35,6 +36,7 @@ func main() {
 	
 	// Test code
 	generateCSR("prvqenam102.namdom002.lab", "prvqenam102.csr")
+	generateSelfSignedCert("prvqenam105.namdom002.lab", "prvqenam105.crt.der")
 }
 
 func generateCSR(fqdn, filename string) {
@@ -47,11 +49,14 @@ func generateCSR(fqdn, filename string) {
 	check(err)
 }
 
-func generateSelfSignedCert(filename string) {
+func generateSelfSignedCert(fqdn, filename string) {
 	if filename == "" {
 		filename = "newcert.pem"
 	}
 	//TODO: Generate a self-signed cert by prompting the user for required data.
+	cert := selfsigned.MakeSelfSignedCert(fqdn, false)
+	err := ioutil.WriteFile(filename, cert, 0644)
+	check(err)
 }
 
 func signCert(filename string) {
