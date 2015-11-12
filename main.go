@@ -3,6 +3,7 @@ package main
 import (
 	"cert-tool/csr"
 	"cert-tool/selfsigned"
+	"cert-tool/keys"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -37,6 +38,7 @@ func main() {
 	// Test code
 	generateCSR("prvqenam102.namdom002.lab", "prvqenam102.csr")
 	generateSelfSignedCert("prvqenam105.namdom002.lab", "prvqenam105.crt.der")
+	keys.MakeRSAKeypair("TestKeyName", 2048)
 }
 
 func generateCSR(fqdn, filename string) {

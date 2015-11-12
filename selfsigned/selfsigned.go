@@ -13,7 +13,6 @@ import (
 
 // Creates a self signed certificate for the specified FQDN. Defaults to SHA256WithRSA.
 func MakeSelfSignedCert(fqdn string, isCA bool) []byte {
-	// TODO - Implement functionality that creates and returns a self-signed certificate.
 	randMax := big.NewInt(int64(1000))
 	serialNumber, err := rand.Int(rand.Reader, randMax)
 	if err != nil {
