@@ -2,8 +2,8 @@ package main
 
 import (
 	"cert-tool/csr"
-	"cert-tool/selfsigned"
 	"cert-tool/keys"
+	"cert-tool/selfsigned"
 	"flag"
 	"fmt"
 	"io/ioutil"
@@ -25,7 +25,7 @@ func main() {
 	pDays := flag.Int("days", 365, "Number of days that cert will be valid.")
 	positionalArgs := flag.Args()
 	flag.Parse()
-	
+
 	// Testing output
 	fmt.Println("selfsigned: ", *pSelfSignedOpt)
 	fmt.Println("size: ", *pKeySize)
@@ -34,7 +34,7 @@ func main() {
 	fmt.Println("signing-cert: ", *pSigningCert)
 	fmt.Println("days: ", *pDays)
 	fmt.Println("args: ", positionalArgs)
-	
+
 	// Test code
 	generateCSR("prvqenam102.namdom002.lab", "prvqenam102.csr")
 	generateSelfSignedCert("prvqenam105.namdom002.lab", "prvqenam105.crt.der")

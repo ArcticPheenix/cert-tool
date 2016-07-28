@@ -18,9 +18,9 @@ func MakeSelfSignedCert(fqdn string, isCA bool) []byte {
 	if err != nil {
 		fmt.Println(err)
 	}
-	
+
 	isCA = false
-	
+
 	//DEBUG
 	fmt.Printf("Value of serialNumber: %v", serialNumber)
 	timeVar := time.Now()
@@ -32,26 +32,26 @@ func MakeSelfSignedCert(fqdn string, isCA bool) []byte {
 		Province:           []string{"Utah"},
 		CommonName:         fqdn,
 	}
-	
+
 	certTemplate := &x509.Certificate{
 		Subject:            subject,
 		NotBefore:          time.Now(),
-		NotAfter:           timeVar.AddDate(0,0,365),  // Add 365 days to timeVar timestamp.
+		NotAfter:           timeVar.AddDate(0, 0, 365), // Add 365 days to timeVar timestamp.
 		DNSNames:           []string{fqdn},
 		EmailAddresses:     []string{"christopher.kelly@microfocus.com"},
 		SerialNumber:       serialNumber,
 		SignatureAlgorithm: 4,
 	}
-	
+
 	// Create a private RSA key.
 	privatekey, err := rsa.GenerateKey(rand.Reader, 2048)
 	if err != nil {
 		fmt.Println(err)
 	}
-	
+
 	// Compute public key from privateKey.
 	publickey := privatekey.Public()
-	
+
 	// Create certificate and return byte slice if no errors were encountered.
 	certificate, err := x509.CreateCertificate(rand.Reader, certTemplate, certTemplate, publickey, privatekey)
 	if err != nil {

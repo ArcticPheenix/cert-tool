@@ -2,11 +2,10 @@
 package keys
 
 import (
-	"crypto/rsa"
 	"crypto/dsa"
-	"crypto/ecdsa"
 	"crypto/elliptic"
 	"crypto/rand"
+	"crypto/rsa"
 	"fmt"
 )
 
