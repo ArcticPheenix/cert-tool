@@ -1,12 +1,13 @@
 package main
 
 import (
-	"cert-tool/csr"
-	"cert-tool/keys"
-	"cert-tool/selfsigned"
 	"flag"
 	"fmt"
 	"io/ioutil"
+
+	"github.com/ArcticPheenix/cert-tool/csr"
+	"github.com/ArcticPheenix/cert-tool/keys"
+	"github.com/ArcticPheenix/cert-tool/selfsigned"
 )
 
 func check(e error) {
