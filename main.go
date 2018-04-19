@@ -3,11 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
-
-	"github.com/ArcticPheenix/cert-tool/csr"
-	"github.com/ArcticPheenix/cert-tool/keys"
-	"github.com/ArcticPheenix/cert-tool/selfsigned"
 )
 
 func check(e error) {
@@ -35,33 +30,4 @@ func main() {
 	fmt.Println("signing-cert: ", *pSigningCert)
 	fmt.Println("days: ", *pDays)
 	fmt.Println("args: ", positionalArgs)
-
-	// Test code
-	generateCSR("prvqenam102.namdom002.lab", "prvqenam102.csr")
-	generateSelfSignedCert("prvqenam105.namdom002.lab", "prvqenam105.crt.der")
-	keys.MakeRSAKeypair("TestKeyName", 2048)
-}
-
-func generateCSR(fqdn, filename string) {
-	//TODO: Generate a CSR by prompting the user for required data.
-	if filename == "" {
-		filename = "newcert.csr"
-	}
-	cert := csr.MakeCertSignReq(fqdn)
-	err := ioutil.WriteFile(filename, cert, 0644)
-	check(err)
-}
-
-func generateSelfSignedCert(fqdn, filename string) {
-	if filename == "" {
-		filename = "newcert.pem"
-	}
-	//TODO: Generate a self-signed cert by prompting the user for required data.
-	cert := selfsigned.MakeSelfSignedCert(fqdn, false)
-	err := ioutil.WriteFile(filename, cert, 0644)
-	check(err)
-}
-
-func signCert(filename string) {
-	//TODO: Process a CSR, and sign the certificate.
 }
