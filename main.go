@@ -46,7 +46,7 @@ func createCertBundle(w http.ResponseWriter, r *http.Request) {
 	// Create an OpenSSL cert bundle with the given data.
 	var certSignRequest CertSignRequest
 	_ = json.NewDecoder(r.Body).Decode(&certSignRequest)
-	fmt.Printf("[DEBUG]: %s", certSignRequest)
+	fmt.Printf("[DEBUG]: %s\n", certSignRequest)
 	if certSignRequest.Days == "" {
 		certSignRequest.Days = NUM_DAYS_DEFAULT
 	}
