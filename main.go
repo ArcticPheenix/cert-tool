@@ -208,3 +208,12 @@ func generateTarball(commonName string) string {
 	}
 	return tarballName
 }
+
+/*
+Clean up the files generated.
+Returns true if successfull, false otherwise.
+*/
+func cleanup(commonName string) bool {
+	// TODO: remove copied sign-only.conf file, and all files releated to commonName
+	return false
+}
