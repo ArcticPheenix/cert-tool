@@ -145,7 +145,7 @@ func generateSignedCert(commonName string) {
 	var out bytes.Buffer
 	cmd.Stdout = &out
 	err := cmd.Run()
-	// check(err)
+	check(err)
 	if err != nil {
 		fmt.Println("Signing the CSR has failed!")
 		fmt.Println(err)
