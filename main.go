@@ -99,6 +99,8 @@ func createCertBundle(w http.ResponseWriter, r *http.Request) {
 	// Already read 512 bytes from the file, so reset offset back to 0
 	openfile.Seek(0, 0)
 	io.Copy(w, openfile) // 'Copy' the file to the client
+
+	cleanup(certSignRequest.CommonName, signingConfFile)
 	return
 }
 
@@ -155,7 +157,7 @@ func modifySignOnlyConf(dnsName string) string {
 		"sed",
 		"-i",
 		"s/DNS_NAME/"+dnsName+"/g",
-		"sign-only.conf")
+		"sign-only-"+uniqueString+".conf")
 	var out bytes.Buffer
 	cmd.Stdout = &out
 	err = cmd.Run()
@@ -235,7 +237,19 @@ func generateTarball(commonName string) string {
 Clean up the files generated.
 Returns true if successfull, false otherwise.
 */
-func cleanup(commonName string) bool {
+func cleanup(commonName string, signingConfigFile string) bool {
 	// TODO: remove copied sign-only.conf file, and all files releated to commonName
+	cmd := exec.Command(
+		"rm",
+		signingConfigFile,
+		commonName+".key",
+		commonName+".csr",
+		commonName+".p12",
+		commonName+".pem.crt",
+		commonName+"-cert-bundle.tar.gz")
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	err := cmd.Run()
+	check(err)
 	return false
 }
