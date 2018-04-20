@@ -6,10 +6,12 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
 	"os/exec"
 	"strconv"
+	"time"
 
 	"github.com/gorilla/mux"
 )
@@ -53,10 +55,10 @@ func createCertBundle(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(certSignRequest)
 
 	// Call each of the four functions to create the cert bundle.
-	modifySignOnlyConf(certSignRequest.CommonName)
+	signingConfFile := modifySignOnlyConf(certSignRequest.CommonName)
 	generateKeys(certSignRequest.CommonName)
 	generateCsr(certSignRequest)
-	generateSignedCert(certSignRequest.CommonName)
+	generateSignedCert(certSignRequest.CommonName, signingConfFile)
 	generatePkcs12(certSignRequest.CommonName)
 	filename := generateTarball(certSignRequest.CommonName)
 	if filename == "" {
@@ -129,8 +131,26 @@ func generateCsr(csr CertSignRequest) {
 	fmt.Printf("CSR Generation Result: %q\n", out.String())
 }
 
-func modifySignOnlyConf(dnsName string) {
+func modifySignOnlyConf(dnsName string) string {
 	// Shell out and replace the DNS_NAME entry in sign-only.conf with a valid name.
+	rand.Seed(time.Now().UnixNano())
+	letters := []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+	uniqueString := func(n int) string {
+		b := make([]rune, n)
+		for i := range b {
+			b[i] = letters[rand.Intn(len(letters))]
+		}
+		return string(b)
+	}(4)
+	copyCommand := exec.Command(
+		"cp",
+		"sign-only.conf",
+		"sign-only-"+uniqueString+".conf")
+	var copyOut bytes.Buffer
+	copyCommand.Stdout = &copyOut
+	err := copyCommand.Run()
+	check(err)
+
 	cmd := exec.Command(
 		"sed",
 		"-i",
@@ -138,19 +158,21 @@ func modifySignOnlyConf(dnsName string) {
 		"sign-only.conf")
 	var out bytes.Buffer
 	cmd.Stdout = &out
-	err := cmd.Run()
+	err = cmd.Run()
 	check(err)
 	fmt.Printf("Modifcation of sign-only.conf result: %q\n", out.String())
+
+	return "sign-only-" + uniqueString + ".conf"
 }
 
-func generateSignedCert(commonName string) {
+func generateSignedCert(commonName string, signingConfigFile string) {
 	// Shell out and generate the signed cert using the commonName as an identifier.
 	cmd := exec.Command(
 		"openssl",
 		"ca",
 		"-extensions",
 		"SAN",
-		"-config", "sign-only.conf",
+		"-config", signingConfigFile,
 		"-batch",
 		"-notext",
 		"-in", commonName+".csr",
