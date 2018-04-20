@@ -140,12 +140,16 @@ func generateSignedCert(commonName string) {
 		"-batch",
 		"-notext",
 		"-in", commonName+".csr",
-		"-out", commonName+"pem.crt",
+		"-out", commonName+".pem.crt",
 		"-passin", "pass:novell")
 	var out bytes.Buffer
 	cmd.Stdout = &out
 	err := cmd.Run()
-	check(err)
+	// check(err)
+	if err != nil {
+		fmt.Println("Signing the CSR has failed!")
+		fmt.Println(err)
+	}
 	fmt.Printf("Cert Signing Result: %q\n", out.String())
 }
 
