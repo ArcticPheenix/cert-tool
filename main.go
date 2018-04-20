@@ -41,7 +41,14 @@ const DEFAULT_KEY_SIZE = 2048
 func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/gencert", createCertBundle).Methods("POST")
+	router.HandleFunc("/gencert", allowCORS).Methods("OPTIONS")
 	log.Fatal(http.ListenAndServe(":8080", router))
+}
+
+func allowCORS(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	createCertBundle(w, r)
+	return
 }
 
 func createCertBundle(w http.ResponseWriter, r *http.Request) {
