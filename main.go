@@ -53,11 +53,11 @@ func createCertBundle(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(certSignRequest)
 
 	// Call each of the four functions to create the cert bundle.
+	modifySignOnlyConf(certSignRequest.CommonName)
 	generateKeys(certSignRequest.CommonName)
 	generateCsr(certSignRequest)
 	generateSignedCert(certSignRequest.CommonName)
 	generatePkcs12(certSignRequest.CommonName)
-	generateTarball(certSignRequest.CommonName)
 	filename := generateTarball(certSignRequest.CommonName)
 	if filename == "" {
 		http.Error(w, "Failure to create/retrieve tarball.", 400)
@@ -129,6 +129,20 @@ func generateCsr(csr CertSignRequest) {
 	fmt.Printf("CSR Generation Result: %q\n", out.String())
 }
 
+func modifySignOnlyConf(dnsName string) {
+	// Shell out and replace the DNS_NAME entry in sign-only.conf with a valid name.
+	cmd := exec.Command(
+		"sed",
+		"-i",
+		"s/DNS_NAME/"+dnsName+"/g",
+		"sign-only.conf")
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	err := cmd.Run()
+	check(err)
+	fmt.Printf("Modifcation of sign-only.conf result: %q\n", out.String())
+}
+
 func generateSignedCert(commonName string) {
 	// Shell out and generate the signed cert using the commonName as an identifier.
 	cmd := exec.Command(
@@ -136,7 +150,7 @@ func generateSignedCert(commonName string) {
 		"ca",
 		"-extensions",
 		"SAN",
-		"-config", "<(cat sign-only.conf <(printf '[SAN]\nsubjectAltName=DNS:"+commonName+"'))",
+		"-config", "sign-only.conf",
 		"-batch",
 		"-notext",
 		"-in", commonName+".csr",
@@ -163,13 +177,13 @@ func generatePkcs12(commonName string) {
 		"-CAfile", "rootCA.cert.pem",
 		"-inkey", commonName+".key",
 		"-in", commonName+".pem.crt",
-		"-out", commonName+"p12",
+		"-out", commonName+".p12",
 		"-passout", "pass:novell")
 	var out bytes.Buffer
 	cmd.Stdout = &out
 	err := cmd.Run()
 	check(err)
-	fmt.Printf("Cert Signing Result: %q\n", out.String())
+	fmt.Printf("PKCS12 Generation Result: %q\n", out.String())
 }
 
 func generateTarball(commonName string) string {
