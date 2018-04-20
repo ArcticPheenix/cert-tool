@@ -193,7 +193,10 @@ func generateTarball(commonName string) string {
 		"tar",
 		"cvzf",
 		tarballName,
-		commonName+"*")
+		commonName+".key",
+		commonName+".csr",
+		commonName+".pem.crt",
+		commonName+".p12")
 	var out bytes.Buffer
 	cmd.Stdout = &out
 	err := cmd.Run()
